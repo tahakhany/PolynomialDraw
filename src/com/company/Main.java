@@ -23,7 +23,7 @@ public class Main {
 
         String[] splitedInput = splitInput(input);
         ArrayList<Integer>[] parsedInput = parseInput(splitedInput);
-        draw(parsedInput,xBorder[0],xBorder[1],yBorder[0],yBorder[1]);
+        draw(parsedInput, xBorder[0], xBorder[1], yBorder[0], yBorder[1]);
     }
 
     public static String[] splitInput(String input) {
@@ -109,28 +109,27 @@ public class Main {
                     output[i].set(0, Integer.parseInt(temp[i].get(j)));
                 }
             }
-
         }
         return output;
     }
 
-    public static float calculate(ArrayList<Integer>[] parsedInput, float x){
+    public static float calculate(ArrayList<Integer>[] parsedInput, float x) {
         float[] sum = new float[parsedInput.length];
         float ans = 1;
-        for (int i=0; i<parsedInput.length; i++){
+        for (int i = 0; i < parsedInput.length; i++) {
             sum[i] = 0;
         }
 
-        for (int i=1; i<parsedInput.length; i++){
-            for (int j=0; j<parsedInput[i].size(); j++){
-                if(parsedInput[i].get(j) != 0){
-                    sum[i] += parsedInput[i].get(j) * Math.pow(x,j);
+        for (int i = 1; i < parsedInput.length; i++) {
+            for (int j = 0; j < parsedInput[i].size(); j++) {
+                if (parsedInput[i].get(j) != 0) {
+                    sum[i] += parsedInput[i].get(j) * Math.pow(x, j);
                 }
             }
         }
 
-        for (int i=1;i<sum.length;i++){
-            if(sum[i] == 0){
+        for (int i = 1; i < sum.length; i++) {
+            if (sum[i] == 0) {
                 return 0.0F;
             } else {
                 ans *= sum[i];
@@ -140,15 +139,15 @@ public class Main {
     }
 
     public static void draw(ArrayList<Integer>[] parsedInput, int xLow, int xHigh, int yLow, int yHigh) {
-        for(int j=yHigh; j>=yLow; j--){
-            for (int i=xLow; i<=xHigh; i++){
-                if(calculate(parsedInput,i) == j){
+        for (int j = yHigh; j >= yLow; j--) {
+            for (int i = xLow; i <= xHigh; i++) {
+                if (calculate(parsedInput, i) == j) {
                     System.out.printf("*");
-                } else if((i == 0) && (j == 0)){
+                } else if ((i == 0) && (j == 0)) {
                     System.out.printf("_");
-                } else if( j == 0 ){
+                } else if (j == 0) {
                     System.out.printf("_");
-                } else if( i == 0 ){
+                } else if (i == 0) {
                     System.out.printf("|");
                 } else System.out.printf(" ");
             }
