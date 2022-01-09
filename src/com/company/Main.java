@@ -22,7 +22,7 @@ public class Main {
         }
 
         String[] splitedInput = splitInput(input);
-        ArrayList<Integer>[] parsedInput = parseInput(splitedInput);
+        ArrayList<Poly>[] parsedInput = parseInput(splitedInput);
         draw(parsedInput, xBorder[0], xBorder[1], yBorder[0], yBorder[1]);
     }
 
@@ -37,7 +37,7 @@ public class Main {
         return splitedInput;
     }
 
-    public static ArrayList<Integer>[] parseInput(String[] input) {
+    public static ArrayList<Poly>[] parseInput(String[] input) {
 
         ArrayList<String>[] temp = new ArrayList[input.length];
 
@@ -76,18 +76,18 @@ public class Main {
 
         String[] x = new String[2];
         String[] pow = new String[2];
-        ArrayList<Integer>[] output = new ArrayList[input.length];
+        ArrayList<Poly>[] output = new ArrayList[input.length];
 
         for (int i = 1; i < temp.length; i++) {
             output[i] = new ArrayList<>();
-            for (int j = 0; j < 1000; j++) {
+            /*for (int j = 0; j < 1000; j++) {
                 output[i].add(0);
-            }
+            }*/
             for (int j = 0; j < temp[i].size(); j++) {
                 if (temp[i].get(j).contains("x")) {
                     x = temp[i].get(j).split("x");
                     if (x.length == 0) {
-                        output[i].set(1, 1);
+                        output[i].add(new Poly(1, 1));
                     } else if (x.length != 1) {
                         pow = x[1].split("\\^");
                         if (Objects.equals(x[0], "") || Objects.equals(x[0], "+")) {
@@ -95,25 +95,25 @@ public class Main {
                         } else if (Objects.equals(x[0], "-")) {
                             x[0] = "-1";
                         }
-                        output[i].set(Integer.parseInt(pow[1]), Integer.parseInt(x[0]));
+                        output[i].add(new Poly(Integer.parseInt(pow[1]), Integer.parseInt(x[0])));
                     } else {
                         if (Objects.equals(x[0], "") || Objects.equals(x[0], "+")) {
                             x[0] = "1";
                         } else if (Objects.equals(x[0], "-")) {
                             x[0] = "-1";
                         }
-                        output[i].set(1, Integer.parseInt(x[0]));
+                        output[i].add(new Poly(1, Integer.parseInt(x[0])));
                     }
 
                 } else {
-                    output[i].set(0, Integer.parseInt(temp[i].get(j)));
+                    output[i].add(new Poly(0, Integer.parseInt(temp[i].get(j))));
                 }
             }
         }
         return output;
     }
 
-    public static float calculate(ArrayList<Integer>[] parsedInput, float x) {
+    public static float calculate(ArrayList<Poly>[] parsedInput, float x) {
         float[] sum = new float[parsedInput.length];
         float ans = 1;
         for (int i = 0; i < parsedInput.length; i++) {
@@ -122,9 +122,8 @@ public class Main {
 
         for (int i = 1; i < parsedInput.length; i++) {
             for (int j = 0; j < parsedInput[i].size(); j++) {
-                if (parsedInput[i].get(j) != 0) {
-                    sum[i] += parsedInput[i].get(j) * Math.pow(x, j);
-                }
+                sum[i] += parsedInput[i].get(j).multiplyer *
+                        Math.pow(x, parsedInput[i].get(j).exp);
             }
         }
 
@@ -138,7 +137,7 @@ public class Main {
         return ans;
     }
 
-    public static void draw(ArrayList<Integer>[] parsedInput, int xLow, int xHigh, int yLow, int yHigh) {
+    public static void draw(ArrayList<Poly>[] parsedInput, int xLow, int xHigh, int yLow, int yHigh) {
         for (int j = yHigh; j >= yLow; j--) {
             for (int i = xLow; i <= xHigh; i++) {
                 if (calculate(parsedInput, i) == j) {
@@ -152,6 +151,38 @@ public class Main {
                 } else System.out.printf(" ");
             }
             System.out.println();
+        }
+    }
+
+    public static class Poly {
+
+        public int multiplyer;
+        public int exp;
+
+        public Poly(int exp, int multiplier) {
+            this.multiplyer = multiplier;
+            this.exp = exp;
+        }
+
+        public Poly() {
+            this.multiplyer = 0;
+            this.exp = 0;
+        }
+
+        public int getMultiplyer() {
+            return multiplyer;
+        }
+
+        public void setMultiplyer(int multiplyer) {
+            this.multiplyer = multiplyer;
+        }
+
+        public int getExp() {
+            return exp;
+        }
+
+        public void setExp(int exp) {
+            this.exp = exp;
         }
     }
 }
